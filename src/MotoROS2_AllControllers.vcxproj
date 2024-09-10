@@ -339,6 +339,7 @@
     <ClCompile Include="MemoryAllocation.c" />
     <ClCompile Include="ServiceQueueTrajPoint.c" />
     <ClCompile Include="ServiceReadWriteIO.c" />
+    <ClCompile Include="ServiceReadWriteVariables.c" />
     <ClCompile Include="ServiceStartPointQueueMode.c" />
     <ClCompile Include="ServiceStopTrajMode.c" />
     <ClCompile Include="ServiceStartTrajMode.c" />
@@ -373,6 +374,7 @@
     <ClInclude Include="..\lib\MotoPlusExterns.h" />
     <ClInclude Include="ServiceQueueTrajPoint.h" />
     <ClInclude Include="ServiceReadWriteIO.h" />
+    <ClInclude Include="ServiceReadWriteVariables.h" />
     <ClInclude Include="ServiceStartPointQueueMode.h" />
     <ClInclude Include="ServiceStopTrajMode.h" />
     <ClInclude Include="ServiceStartTrajMode.h" />
