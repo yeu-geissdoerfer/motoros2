@@ -297,6 +297,9 @@
     <ClCompile Include="ServiceReadWriteIO.c">
       <Filter>Source Files\Services</Filter>
     </ClCompile>
+	<ClCompile Include="ServiceReadWriteVariables.c">
+	  <Filter>Source Files\Services</Filter>
+	</ClCompile>
     <ClCompile Include="ServiceResetError.c">
       <Filter>Source Files\Services</Filter>
     </ClCompile>
@@ -377,6 +380,9 @@
     <ClInclude Include="ServiceReadWriteIO.h">
       <Filter>Header Files\Services</Filter>
     </ClInclude>
+	<ClInclude Include="ServiceReadWriteVariables.h">
+	  <Filter>Header Files\Services</Filter>
+	</ClInclude>
     <ClInclude Include="ServiceStopTrajMode.h">
       <Filter>Header Files\Services</Filter>
     </ClInclude>
