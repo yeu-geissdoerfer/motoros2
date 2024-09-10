@@ -16,7 +16,7 @@ typedef enum
     VAR_RESULT_READ_API_ERROR = motoros2_interfaces__msg__VarResultCodes__READ_API_ERROR,
     VAR_RESULT_WRITE_API_ERROR = motoros2_interfaces__msg__VarResultCodes__WRITE_API_ERROR,
     VAR_RESULT_READ_VAR_NUMBER_INVALID = motoros2_interfaces__msg__VarResultCodes__READ_VAR_NUMBER_INVALID,
-    VAR_RESULT_WRITE_VAR_NUMBER_INVALID = motoros2_interfaces__msg__VarResultCodes__WRITE_VAR_NUMBER_INVALID,
+    VAR_RESULT_WRITE_VAR_NUMBER_INVALID = motoros2_interfaces__msg__VarResultCodes__WRITE_VAR_NUMBER_INVALID
 
 
     /*
