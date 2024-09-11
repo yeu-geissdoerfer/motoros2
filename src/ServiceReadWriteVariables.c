@@ -277,6 +277,23 @@ void Ros_ServiceWriteVarByte_Trigger(const void* request_msg, void* response_msg
 }
 
 
+// empty functions
+void Ros_ServiceReadVarDouble_Trigger(const void* request_msg, void* response_msg) {}
+void Ros_ServiceWriteVarDouble_Trigger(const void* request_msg, void* response_msg) {}
+
+void Ros_ServiceReadVarInteger_Trigger(const void* request_msg, void* response_msg) {}
+void Ros_ServiceWriteVarInteger_Trigger(const void* request_msg, void* response_msg) {}
+
+void Ros_ServiceReadVarPosition_Trigger(const void* request_msg, void* response_msg) {}
+void Ros_ServiceWriteVarPosition_Trigger(const void* request_msg, void* response_msg) {}
+
+void Ros_ServiceReadVarReal_Trigger(const void* request_msg, void* response_msg) {}
+void Ros_ServiceWriteVarReal_Trigger(const void* request_msg, void* response_msg) {}
+
+void Ros_ServiceReadVarString_Trigger(const void* request_msg, void* response_msg) {}
+void Ros_ServiceWriteVarString_Trigger(const void* request_msg, void* response_msg) {}
+
+
 BOOL Ros_VarServer_IsValidVarNumber(UINT32 var_number)
 {
     return TRUE;
