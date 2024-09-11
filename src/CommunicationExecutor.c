@@ -298,6 +298,25 @@ void Ros_Communication_RunIoExecutor(rclc_executor_t* executor, SEM_ID semIoExec
     mpDeleteSelf;
 }
 
+void Ros_Communication_RunVarExecutor(rclc_executor_t* executor, SEM_ID semVarExecutorStatus)
+{
+    mpSemTake(semVarExecutorStatus, NO_WAIT);
+
+    while (g_Ros_Communication_AgentIsConnected)
+    {
+        Ros_Sleep(g_nodeConfigSettings.executor_sleep_period);
+
+        // timeout specified in nanoseconds
+        rclc_executor_spin_some(executor, RCL_MS_TO_NS(1));
+    }
+    Ros_Debug_BroadcastMsg("Terminating Variable Executor Task");
+
+    //notify parent task that this has finished
+    mpSemGive(semVarExecutorStatus);
+
+    mpDeleteSelf;
+}
+
 void Ros_Communication_StartExecutors(SEM_ID semCommunicationExecutorStatus)
 {
     rcl_ret_t rc;
@@ -335,6 +354,12 @@ void Ros_Communication_StartExecutors(SEM_ID semCommunicationExecutorStatus)
 
     rc = rclc_executor_init(&executor_io_control, &g_microRosNodeInfo.support.context, QUANTITY_OF_HANDLES_FOR_IO_EXECUTOR, &g_motoros2_Allocator);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_CREATE_IO_EXECUTOR, "Failed creating I/O control executor (%d)", (int)rc);
+
+    rclc_executor_t executor_var_control;
+    executor_var_control = rclc_executor_get_zero_initialized_executor();
+
+    rc = rclc_executor_init(&executor_var_control, &g_microRosNodeInfo.support.context, QUANTITY_OF_HANDLES_FOR_VAR_EXECUTOR, &g_motoros2_Allocator);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_CREATE_VAR_EXECUTOR, "Failed creating variable control executor (%d)", (int)rc);
 
     //==========================================================
     //Add entities to motion executor
@@ -429,11 +454,80 @@ void Ros_Communication_StartExecutors(SEM_ID semCommunicationExecutorStatus)
         &g_messages_ReadWriteIO.resp_mreg_write, Ros_ServiceWriteMRegister_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_M_REG, "Failed adding service (%d)", (int)rc);
 
+    //==========================================================
+    //Add entities to variable executor
+    //
+    // 
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceReadVarByte, &g_serviceReadVarByte.req_byte_var_read,
+        &g_serviceReadVarByte.resp_byte_var_read, Ros_ServiceReadVarByte_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_BYTE, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceReadVarDouble, &g_serviceReadVarDouble.req_double_var_read,
+        &g_serviceReadVarDouble.resp_double_var_read, Ros_ServiceReadVarDouble_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_DOUBLE, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceReadVarInteger, &g_serviceReadVarInteger.req_int_var_read,
+        &g_serviceReadVarInteger.resp_int_var_read, Ros_ServiceReadVarInteger_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_INTEGER, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceReadVarPosition, &g_serviceReadVarPosition.req_pos_var_read,
+        &g_serviceReadVarPosition.resp_pos_var_read, Ros_ServiceReadVarPosition_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_POSITION, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceReadVarReal, &g_serviceReadVarReal.req_real_var_read,
+        &g_serviceReadVarReal.resp_real_var_read, Ros_ServiceReadVarReal_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_REAL, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceReadVarString, &g_serviceReadVarString.req_str_var_read,
+        &g_serviceReadVarString.resp_str_var_read, Ros_ServiceReadVarString_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_STRING, "Failed adding service (%d)", (int)rc);
+
+    
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceWriteVarByte, &g_serviceWriteVarByte.req_byte_var_write,
+        &g_serviceWriteVarByte.resp_byte_var_write, Ros_ServiceWriteVarByte_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_BYTE, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceWriteVarDouble, &g_serviceWriteVarDouble.req_double_var_write,
+        &g_serviceWriteVarDouble.resp_double_var_write, Ros_ServiceWriteVarDouble_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_DOUBLE, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceWriteVarInteger, &g_serviceWriteVarInteger.req_int_var_write,
+        &g_serviceWriteVarInteger.resp_int_var_write, Ros_ServiceWriteVarInteger_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_INTEGER, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceWriteVarPosition, &g_serviceWriteVarPosition.req_pos_var_write,
+        &g_serviceWriteVarPosition.resp_pos_var_write, Ros_ServiceWriteVarPosition_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_POSITION, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceWriteVarReal, &g_serviceWriteVarReal.req_real_var_write,
+        &g_serviceWriteVarReal.resp_real_var_write, Ros_ServiceWriteVarReal_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_REAL, "Failed adding service (%d)", (int)rc);
+
+    rc = rclc_executor_add_service(
+        &executor_var_control, &g_serviceWriteVarString, &g_serviceWriteVarString.req_str_var_write,
+        &g_serviceWriteVarString.resp_str_var_write, Ros_ServiceWriteVarString_Trigger);
+    motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_STRING, "Failed adding service (%d)", (int)rc);
+
+
+
+
     //===========================================================
 
     // Optional prepare for avoiding allocations during spin
     rclc_executor_prepare(&executor_motion_control);
     rclc_executor_prepare(&executor_io_control);
+    rclc_executor_prepare(&executor_var_control);
 
     //===========================================================
     //===========================================================
@@ -459,6 +553,13 @@ void Ros_Communication_StartExecutors(SEM_ID semCommunicationExecutorStatus)
         (FUNCPTR)Ros_Communication_RunIoExecutor,
         (int)&executor_io_control, (int)semIoExecutorStatus, 0, 0, 0, 0, 0, 0, 0, 0);
 
+    // Start executor that runs the Variable executor
+    // (This task deletes itself when the agent disconnects.)
+    SEM_ID semVarExecutorStatus = mpSemBCreate(SEM_Q_FIFO, SEM_FULL);
+    mpCreateTask(MP_PRI_TIME_NORMAL, MP_STACK_SIZE,
+        (FUNCPTR)Ros_Communication_RunVarExecutor,
+        (int)&executor_var_control, (int)semVarExecutorStatus, 0, 0, 0, 0, 0, 0, 0, 0);
+
     while (g_Ros_Communication_AgentIsConnected)
     {
         Ros_Sleep(g_nodeConfigSettings.executor_sleep_period);
@@ -472,6 +573,10 @@ void Ros_Communication_StartExecutors(SEM_ID semCommunicationExecutorStatus)
     //wait for Ros_Communication_RunIoExecutor task to finish before cleaning shared resources
     mpSemTake(semIoExecutorStatus, WAIT_FOREVER);
     mpSemDelete(semIoExecutorStatus);
+
+    //wait for Ros_Communication_RunVarExecutor task to finish before cleaning shared resources
+    mpSemTake(semVarExecutorStatus, WAIT_FOREVER);
+    mpSemDelete(semVarExecutorStatus);
 
     //===========================================================
     //===========================================================
@@ -503,6 +608,9 @@ void Ros_Communication_StartExecutors(SEM_ID semCommunicationExecutorStatus)
 
     Ros_Debug_BroadcastMsg("Cleanup I/O control executor");
     rclc_executor_fini(&executor_io_control);
+
+    Ros_Debug_BroadcastMsg("Cleanup variable control executor");
+    rclc_executor_fini(&executor_var_control);
 
     Ros_Debug_BroadcastMsg("Cleanup timer for UserLan link state monitor");
     rc = rcl_timer_fini(&timerMonitorUserLanState);

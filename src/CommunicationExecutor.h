@@ -28,6 +28,11 @@
 //      service read & write I/O +                          6
 #define QUANTITY_OF_HANDLES_FOR_IO_EXECUTOR                 (7)
 
+// total number of handles =
+//      timers +                                            1
+//      service read & write var +                          12
+#define QUANTITY_OF_HANDLES_FOR_VAR_EXECUTOR                 (13)
+
 typedef struct
 {
     rcl_init_options_t initOptions;
