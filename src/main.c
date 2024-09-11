@@ -125,6 +125,7 @@ void RosInitTask()
 
         Ros_ServiceQueueTrajPoint_Initialize();
         Ros_ServiceReadWriteIO_Initialize();
+        Ros_ServiceReadWriteVariable_Initialize();
         Ros_ServiceResetError_Initialize();
         Ros_ServiceStartTrajMode_Initialize();
         Ros_ServiceStartPointQueueMode_Initialize();
@@ -208,6 +209,7 @@ void RosInitTask()
         Ros_ServiceStartPointQueueMode_Cleanup();
         Ros_ServiceResetError_Cleanup();
         Ros_ServiceReadWriteIO_Cleanup();
+        Ros_ServiceReadWriteVariable_Cleanup();
         Ros_ServiceQueueTrajPoint_Cleanup();
 
         Ros_ActionServer_FJT_Cleanup();
