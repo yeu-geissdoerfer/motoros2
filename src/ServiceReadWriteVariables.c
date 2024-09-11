@@ -37,19 +37,19 @@ static BOOL Ros_VarServer_IsValidVarNumber(UINT32 var_number);
 static const char* const Ros_VarServer_ResultCodeToStr(UINT32 resultCode);
 
 
-extern rcl_service_t g_serviceReadVarByte;
-extern rcl_service_t g_serviceReadVarDouble;
-extern rcl_service_t g_serviceReadVarInteger;
-extern rcl_service_t g_serviceReadVarPosition;
-extern rcl_service_t g_serviceReadVarReal;
-extern rcl_service_t g_serviceReadVarString;
+rcl_service_t g_serviceReadVarByte;
+rcl_service_t g_serviceReadVarDouble;
+rcl_service_t g_serviceReadVarInteger;
+rcl_service_t g_serviceReadVarPosition;
+rcl_service_t g_serviceReadVarReal;
+rcl_service_t g_serviceReadVarString;
 
-extern rcl_service_t g_serviceWriteVarByte;
-extern rcl_service_t g_serviceWriteVarDouble;
-extern rcl_service_t g_serviceWriteVarInteger;
-extern rcl_service_t g_serviceWriteVarPosition;
-extern rcl_service_t g_serviceWriteVarReal;
-extern rcl_service_t g_serviceWriteVarString;
+rcl_service_t g_serviceWriteVarByte;
+rcl_service_t g_serviceWriteVarDouble;
+rcl_service_t g_serviceWriteVarInteger;
+rcl_service_t g_serviceWriteVarPosition;
+rcl_service_t g_serviceWriteVarReal;
+rcl_service_t g_serviceWriteVarString;
 
 ServiceReadWriteVariable_Messages g_messages_ReadWriteVariable;
 
