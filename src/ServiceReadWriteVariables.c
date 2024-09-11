@@ -254,7 +254,7 @@ void Ros_ServiceWriteVarByte_Trigger(const void* request_msg, void* response_msg
     {
         STATUS status = ERROR;
 
-        MP_USER_VAR_INFO writeVarInfo;
+        MP_USR_VAR_INFO writeVarInfo;
         memset(&writeVarInfo, 0, sizeof(writeVarInfo));
 
         writeVarInfo.var_type = MK_VAR_TYPE(MP_VAR_B);
