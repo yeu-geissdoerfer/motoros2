@@ -244,10 +244,10 @@ void Ros_ServiceReadVarByte_Trigger(const void* request_msg, void* response_msg)
 void Ros_ServiceWriteVarByte_Trigger(const void* request_msg, void* response_msg)
 {
     motoros2_interfaces__srv__ReadVarByte_Request* request =
-        (motoros2_interfaces__srv__ReadVarByte_Request*)request_msg;
+        (motoros2_interfaces__srv__ReadVarByte_Request*) request_msg;
 
     motoros2_interfaces__srv__ReadVarByte_Response* response =
-        (motoros2_interfaces__srv__ReadVarByte_Response*)response_msg;
+        (motoros2_interfaces__srv__ReadVarByte_Response*) response_msg;
 
 
     if (Ros_VarServer_IsValidVarNumber(request->var_number))
