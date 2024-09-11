@@ -459,64 +459,64 @@ void Ros_Communication_StartExecutors(SEM_ID semCommunicationExecutorStatus)
     //
     // 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceReadVarByte, &g_serviceReadVarByte.req_byte_var_read,
-        &g_serviceReadVarByte.resp_byte_var_read, Ros_ServiceReadVarByte_Trigger);
+        &executor_var_control, &g_serviceReadVarByte, &g_messages_ReadWriteVariable.req_byte_var_read,
+        &g_messages_ReadWriteVariable.resp_byte_var_read, Ros_ServiceReadVarByte_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_BYTE, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceReadVarDouble, &g_serviceReadVarDouble.req_double_var_read,
-        &g_serviceReadVarDouble.resp_double_var_read, Ros_ServiceReadVarDouble_Trigger);
+        &executor_var_control, &g_serviceReadVarDouble, &g_messages_ReadWriteVariable.req_double_var_read,
+        &g_messages_ReadWriteVariable.resp_double_var_read, Ros_ServiceReadVarDouble_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_DOUBLE, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceReadVarInteger, &g_serviceReadVarInteger.req_int_var_read,
-        &g_serviceReadVarInteger.resp_int_var_read, Ros_ServiceReadVarInteger_Trigger);
+        &executor_var_control, &g_serviceReadVarInteger, &g_messages_ReadWriteVariable.req_int_var_read,
+        &g_messages_ReadWriteVariable.resp_int_var_read, Ros_ServiceReadVarInteger_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_INTEGER, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceReadVarPosition, &g_serviceReadVarPosition.req_pos_var_read,
-        &g_serviceReadVarPosition.resp_pos_var_read, Ros_ServiceReadVarPosition_Trigger);
+        &executor_var_control, &g_serviceReadVarPosition, &g_messages_ReadWriteVariable.req_pos_var_read,
+        &g_messages_ReadWriteVariable.resp_pos_var_read, Ros_ServiceReadVarPosition_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_POSITION, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceReadVarReal, &g_serviceReadVarReal.req_real_var_read,
-        &g_serviceReadVarReal.resp_real_var_read, Ros_ServiceReadVarReal_Trigger);
+        &executor_var_control, &g_serviceReadVarReal, &g_messages_ReadWriteVariable.req_real_var_read,
+        &g_messages_ReadWriteVariable.resp_real_var_read, Ros_ServiceReadVarReal_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_REAL, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceReadVarString, &g_serviceReadVarString.req_str_var_read,
-        &g_serviceReadVarString.resp_str_var_read, Ros_ServiceReadVarString_Trigger);
+        &executor_var_control, &g_serviceReadVarString, &g_messages_ReadWriteVariable.req_str_var_read,
+        &g_messages_ReadWriteVariable.resp_str_var_read, Ros_ServiceReadVarString_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_READ_VAR_STRING, "Failed adding service (%d)", (int)rc);
 
     
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceWriteVarByte, &g_serviceWriteVarByte.req_byte_var_write,
-        &g_serviceWriteVarByte.resp_byte_var_write, Ros_ServiceWriteVarByte_Trigger);
+        &executor_var_control, &g_serviceWriteVarByte, &g_messages_ReadWriteVariable.req_byte_var_write,
+        &g_messages_ReadWriteVariable.resp_byte_var_write, Ros_ServiceWriteVarByte_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_BYTE, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceWriteVarDouble, &g_serviceWriteVarDouble.req_double_var_write,
-        &g_serviceWriteVarDouble.resp_double_var_write, Ros_ServiceWriteVarDouble_Trigger);
+        &executor_var_control, &g_serviceWriteVarDouble, &g_messages_ReadWriteVariable.req_double_var_write,
+        &g_messages_ReadWriteVariable.resp_double_var_write, Ros_ServiceWriteVarDouble_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_DOUBLE, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceWriteVarInteger, &g_serviceWriteVarInteger.req_int_var_write,
-        &g_serviceWriteVarInteger.resp_int_var_write, Ros_ServiceWriteVarInteger_Trigger);
+        &executor_var_control, &g_serviceWriteVarInteger, &g_messages_ReadWriteVariable.req_int_var_write,
+        &g_messages_ReadWriteVariable.resp_int_var_write, Ros_ServiceWriteVarInteger_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_INTEGER, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceWriteVarPosition, &g_serviceWriteVarPosition.req_pos_var_write,
-        &g_serviceWriteVarPosition.resp_pos_var_write, Ros_ServiceWriteVarPosition_Trigger);
+        &executor_var_control, &g_serviceWriteVarPosition, &g_messages_ReadWriteVariable.req_pos_var_write,
+        &g_messages_ReadWriteVariable.resp_pos_var_write, Ros_ServiceWriteVarPosition_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_POSITION, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceWriteVarReal, &g_serviceWriteVarReal.req_real_var_write,
-        &g_serviceWriteVarReal.resp_real_var_write, Ros_ServiceWriteVarReal_Trigger);
+        &executor_var_control, &g_serviceWriteVarReal, &g_messages_ReadWriteVariable.req_real_var_write,
+        &g_messages_ReadWriteVariable.resp_real_var_write, Ros_ServiceWriteVarReal_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_REAL, "Failed adding service (%d)", (int)rc);
 
     rc = rclc_executor_add_service(
-        &executor_var_control, &g_serviceWriteVarString, &g_serviceWriteVarString.req_str_var_write,
-        &g_serviceWriteVarString.resp_str_var_write, Ros_ServiceWriteVarString_Trigger);
+        &executor_var_control, &g_serviceWriteVarString, &g_messages_ReadWriteVariable.req_str_var_write,
+        &g_messages_ReadWriteVariable.resp_str_var_write, Ros_ServiceWriteVarString_Trigger);
     motoRosAssert_withMsg(rc == RCL_RET_OK, SUBCODE_FAIL_ADD_SERVICE_WRITE_VAR_STRING, "Failed adding service (%d)", (int)rc);
 
 
