@@ -102,6 +102,7 @@
 #include "PositionMonitor.h"
 #include "ServiceQueueTrajPoint.h"
 #include "ServiceReadWriteIO.h"
+#include "ServiceReadWriteVariables.h"
 #include "ServiceResetError.h"
 #include "ServiceStartTrajMode.h"
 #include "ServiceStartPointQueueMode.h"
