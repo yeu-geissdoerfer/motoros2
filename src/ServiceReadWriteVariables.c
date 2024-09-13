@@ -241,58 +241,79 @@ void Ros_ServiceReadVarByte_Trigger(const void* request_msg, void* response_msg)
     }
 }
 
-void Ros_ServiceWriteVarByte_Trigger(const void* request_msg, void* response_msg)
-{
-    motoros2_interfaces__srv__WriteVarByte_Request* request =
-        (motoros2_interfaces__srv__WriteVarByte_Request*) request_msg;
-
-    motoros2_interfaces__srv__WriteVarByte_Response* response =
-        (motoros2_interfaces__srv__WriteVarByte_Response*) response_msg;
-
-
-    if (Ros_VarServer_IsValidVarNumber(request->var_number))
-    {
-        STATUS status = ERROR;
-
-        MP_USR_VAR_INFO writeVarInfo;
-        memset(&writeVarInfo, 0, sizeof(writeVarInfo));
-
-        writeVarInfo.var_type = MK_VAR_TYPE(MP_VAR_B);
-        writeVarInfo.var_no = request->var_number;
-        writeVarInfo.val.b = request->value;
-        status = mpPutUserVars(&writeVarInfo);
-
-        response->result_code = (status == 0) ? VAR_RESULT_OK : VAR_RESULT_WRITE_API_ERROR;
-        response->success = (status == 0);
-        rosidl_runtime_c__String__assign(&response->message,
-            Ros_VarServer_ResultCodeToStr(response->result_code));
-    }
-    else
-    {
-        response->result_code = VAR_RESULT_WRITE_VAR_NUMBER_INVALID;
-
-        response->success = FALSE;
-        rosidl_runtime_c__String__assign(&response->message,
-            Ros_VarServer_ResultCodeToStr(response->result_code));
-    }
-}
-
-
 // empty functions
 void Ros_ServiceReadVarDouble_Trigger(const void* request_msg, void* response_msg) {}
-void Ros_ServiceWriteVarDouble_Trigger(const void* request_msg, void* response_msg) {}
 
 void Ros_ServiceReadVarInteger_Trigger(const void* request_msg, void* response_msg) {}
-void Ros_ServiceWriteVarInteger_Trigger(const void* request_msg, void* response_msg) {}
 
 void Ros_ServiceReadVarPosition_Trigger(const void* request_msg, void* response_msg) {}
-void Ros_ServiceWriteVarPosition_Trigger(const void* request_msg, void* response_msg) {}
+
 
 void Ros_ServiceReadVarReal_Trigger(const void* request_msg, void* response_msg) {}
-void Ros_ServiceWriteVarReal_Trigger(const void* request_msg, void* response_msg) {}
+
 
 void Ros_ServiceReadVarString_Trigger(const void* request_msg, void* response_msg) {}
+
+
+
+// Multiline macro acting as a template for writing values to different variable types
+#define WRITE_VAR_HANDLER(VAR_TYPE, REQUEST_TYPE, RESPONSE_TYPE, MP_VAR_TYPE_CONST) \
+    REQUEST_TYPE* request = (REQUEST_TYPE*) request_msg;                                      \
+    RESPONSE_TYPE* response = (RESPONSE_TYPE*) response_msg;                                  \
+                                                                                              \
+    if (Ros_VarServer_IsValidVarNumber(request->var_number))                                  \
+    {                                                                                         \
+        STATUS status = ERROR;                                                                \
+        MP_USR_VAR_INFO writeVarInfo;                                                         \
+        memset(&writeVarInfo, 0, sizeof(writeVarInfo));                                       \
+                                                                                              \
+        writeVarInfo.var_type = MK_VAR_TYPE(MP_VAR_TYPE_CONST);                               \
+        writeVarInfo.var_no = request->var_number;                                            \
+        writeVarInfo.val.VAR_TYPE = request->value;                                           \
+        status = mpPutUserVars(&writeVarInfo);                                                \
+                                                                                              \
+        response->result_code = (status == 0) ? VAR_RESULT_OK : VAR_RESULT_WRITE_API_ERROR;   \
+        response->success = (status == 0);                                                    \
+        rosidl_runtime_c__String__assign(&response->message,                                  \
+            Ros_VarServer_ResultCodeToStr(response->result_code));                            \
+    }                                                                                         \
+    else                                                                                      \
+    {                                                                                         \
+        response->result_code = VAR_RESULT_WRITE_VAR_NUMBER_INVALID;                          \
+        response->success = FALSE;                                                            \
+        rosidl_runtime_c__String__assign(&response->message,                                  \
+            Ros_VarServer_ResultCodeToStr(response->result_code));                            \
+    }
+
+
+void Ros_ServiceWriteVarByte_Trigger(const void* request_msg, void* response_msg)
+{
+    WRITE_VAR_HANDLER(b, motoros2_interfaces__srv__WriteVarByte_Request,
+        motoros2_interfaces__srv__WriteVarByte_Response, MP_VAR_B);
+}
+
+void Ros_ServiceWriteVarDouble_Trigger(const void* request_msg, void* response_msg)
+{
+    WRITE_VAR_HANDLER(d, motoros2_interfaces__srv__WriteVarDouble_Request,
+        motoros2_interfaces__srv__WriteVarDouble_Response, MP_VAR_D);
+}
+
+void Ros_ServiceWriteVarInteger_Trigger(const void* request_msg, void* response_msg)
+{
+    WRITE_VAR_HANDLER(i, motoros2_interfaces__srv__WriteVarInteger_Request,
+        motoros2_interfaces__srv__WriteVarInteger_Response, MP_VAR_I);
+}
+
+void Ros_ServiceWriteVarReal_Trigger(const void* request_msg, void* response_msg)
+{
+    WRITE_VAR_HANDLER(r, motoros2_interfaces__srv__WriteVarReal_Request,
+        motoros2_interfaces__srv__WriteVarReal_Response, MP_VAR_R);
+}
+
 void Ros_ServiceWriteVarString_Trigger(const void* request_msg, void* response_msg) {}
+
+void Ros_ServiceWriteVarPosition_Trigger(const void* request_msg, void* response_msg) {}
+
 
 
 BOOL Ros_VarServer_IsValidVarNumber(UINT32 var_number)
