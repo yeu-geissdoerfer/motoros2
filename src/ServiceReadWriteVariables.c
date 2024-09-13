@@ -205,52 +205,63 @@ void Ros_ServiceReadWriteVariable_Cleanup()
 }
 
 
+
+// Multiline macro acting as a template for reading values to different variable types
+#define READ_VAR_HANDLER(VAR_TYPE, REQUEST_TYPE, RESPONSE_TYPE, MP_VAR_TYPE_CONST) \
+    REQUEST_TYPE* request = (REQUEST_TYPE*) request_msg;                                      \
+    RESPONSE_TYPE* response = (RESPONSE_TYPE*) response_msg;                                  \
+                                                                                              \
+    if (Ros_VarServer_IsValidVarNumber(request->var_number))                                  \
+    {                                                                                         \
+        STATUS status = ERROR;                                                                \
+        MP_USR_VAR_INFO readVarInfo;                                                          \
+        memset(&readVarInfo, 0, sizeof(readVarInfo));                                         \
+                                                                                              \
+        readVarInfo.var_type = MK_VAR_TYPE(MP_VAR_TYPE_CONST);                                \
+        readVarInfo.var_no = request->var_number;                                             \
+        status = mpGetUserVars(&readVarInfo);                                                 \
+                                                                                              \
+        response->value = readVarInfo.val.VAR_TYPE;                                           \
+        response->result_code = (status == 0) ? VAR_RESULT_OK : VAR_RESULT_WRITE_API_ERROR;   \
+        response->success = (status == 0);                                                    \
+        rosidl_runtime_c__String__assign(&response->message,                                  \
+            Ros_VarServer_ResultCodeToStr(response->result_code));                            \
+    }                                                                                         \
+    else                                                                                      \
+    {                                                                                         \
+        response->value = 0;                                                                  \
+        response->result_code = VAR_RESULT_WRITE_VAR_NUMBER_INVALID;                          \
+        response->success = FALSE;                                                            \
+        rosidl_runtime_c__String__assign(&response->message,                                  \
+            Ros_VarServer_ResultCodeToStr(response->result_code));                            \
+    }
+
 void Ros_ServiceReadVarByte_Trigger(const void* request_msg, void* response_msg)
 {
-    motoros2_interfaces__srv__ReadVarByte_Request* request =
-        (motoros2_interfaces__srv__ReadVarByte_Request*) request_msg;
-
-    motoros2_interfaces__srv__ReadVarByte_Response* response =
-        (motoros2_interfaces__srv__ReadVarByte_Response*) response_msg;
-
-
-    if (Ros_VarServer_IsValidVarNumber(request->var_number))
-    {
-        STATUS status = ERROR;
-
-        MP_USR_VAR_INFO readVarInfo;
-        memset(&readVarInfo, 0, sizeof(readVarInfo));
-
-        readVarInfo.var_type = MK_VAR_TYPE(MP_VAR_B);
-        readVarInfo.var_no = request->var_number;
-        status = mpGetUserVars(&readVarInfo);
-
-        response->value = readVarInfo.val.b;
-        response->result_code = (status == 0) ? VAR_RESULT_OK : VAR_RESULT_READ_API_ERROR;
-        response->success = (status == 0);
-        rosidl_runtime_c__String__assign(&response->message,
-            Ros_VarServer_ResultCodeToStr(response->result_code));
-    }
-    else
-    {
-        response->value = 0;
-        response->result_code = VAR_RESULT_READ_VAR_NUMBER_INVALID;
-        response->success = FALSE;
-        rosidl_runtime_c__String__assign(&response->message,
-            Ros_VarServer_ResultCodeToStr(response->result_code));
-    }
+    READ_VAR_HANDLER(b, motoros2_interfaces__srv__ReadVarByte_Request,
+        motoros2_interfaces__srv__ReadVarByte_Response, MP_VAR_B);
 }
 
-// empty functions
-void Ros_ServiceReadVarDouble_Trigger(const void* request_msg, void* response_msg) {}
+void Ros_ServiceReadVarDouble_Trigger(const void* request_msg, void* response_msg)
+{
+    READ_VAR_HANDLER(d, motoros2_interfaces__srv__ReadVarDouble_Request,
+        motoros2_interfaces__srv__ReadVarDouble_Response, MP_VAR_D);
+}
 
-void Ros_ServiceReadVarInteger_Trigger(const void* request_msg, void* response_msg) {}
+void Ros_ServiceReadVarInteger_Trigger(const void* request_msg, void* response_msg)
+{
+    READ_VAR_HANDLER(i, motoros2_interfaces__srv__ReadVarInteger_Request,
+        motoros2_interfaces__srv__ReadVarInteger_Response, MP_VAR_I);
+}
+
+void Ros_ServiceReadVarReal_Trigger(const void* request_msg, void* response_msg)
+{
+    READ_VAR_HANDLER(r, motoros2_interfaces__srv__ReadVarReal_Request,
+        motoros2_interfaces__srv__ReadVarReal_Response, MP_VAR_R);
+}
+
 
 void Ros_ServiceReadVarPosition_Trigger(const void* request_msg, void* response_msg) {}
-
-
-void Ros_ServiceReadVarReal_Trigger(const void* request_msg, void* response_msg) {}
-
 
 void Ros_ServiceReadVarString_Trigger(const void* request_msg, void* response_msg) {}
 
