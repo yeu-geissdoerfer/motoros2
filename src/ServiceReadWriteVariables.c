@@ -33,7 +33,7 @@ typedef enum
 } VariableResultCodes;
 
 
-static BOOL Ros_VarServer_IsValidVarNumber(UINT32 var_number);
+static BOOL Ros_VarServer_IsValidVarNumber(UINT32 var_number, int MP_VAR_TYPE_CONST);
 static const char* const Ros_VarServer_ResultCodeToStr(UINT32 resultCode);
 
 
@@ -211,7 +211,7 @@ void Ros_ServiceReadWriteVariable_Cleanup()
     REQUEST_TYPE* request = (REQUEST_TYPE*) request_msg;                                      \
     RESPONSE_TYPE* response = (RESPONSE_TYPE*) response_msg;                                  \
                                                                                               \
-    if (Ros_VarServer_IsValidVarNumber(request->var_number))                                  \
+    if (Ros_VarServer_IsValidVarNumber(request->var_number, MP_VAR_TYPE_CONST))               \
     {                                                                                         \
         STATUS status = ERROR;                                                                \
         MP_USR_VAR_INFO readVarInfo;                                                          \
@@ -272,7 +272,7 @@ void Ros_ServiceReadVarString_Trigger(const void* request_msg, void* response_ms
     REQUEST_TYPE* request = (REQUEST_TYPE*) request_msg;                                      \
     RESPONSE_TYPE* response = (RESPONSE_TYPE*) response_msg;                                  \
                                                                                               \
-    if (Ros_VarServer_IsValidVarNumber(request->var_number))                                  \
+    if (Ros_VarServer_IsValidVarNumber(request->var_number, MP_VAR_TYPE_CONST))               \
     {                                                                                         \
         STATUS status = ERROR;                                                                \
         MP_USR_VAR_INFO writeVarInfo;                                                         \
@@ -327,9 +327,20 @@ void Ros_ServiceWriteVarPosition_Trigger(const void* request_msg, void* response
 
 
 
-BOOL Ros_VarServer_IsValidVarNumber(UINT32 var_number)
+BOOL Ros_VarServer_IsValidVarNumber(UINT32 var_number, int MP_VAR_TYPE_CONST)
 {
-    return TRUE;
+    int var_count;
+    var_count = GP_getQuantityOfRobotVariables(MP_VAR_TYPE_CONST);
+    
+    //need to substract 1 from the variable count, as variable count 100 means the variable number 0 to 99 are valid
+    if ((var_count-1) >= var_number)
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 const char* const Ros_VarServer_ResultCodeToStr(UINT32 resultCode)
