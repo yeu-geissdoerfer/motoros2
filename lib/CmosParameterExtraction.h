@@ -113,8 +113,8 @@ extern STATUS GP_getJointPulseLimits(int ctrlGrp, JOINT_PULSE_LIMITS* jointPulse
 /* << 17 >>                                                              	  */
 /* Function name : STATUS GP_getJointVelocityLimits()						  */
 /* Functionality : Gets the velocity limit for each joint					  */
-/* Parameter	 : int ctrlGrp - Robot control to fetch data	[IN]		  */
-/*				   JOINT_ANGULAR_VELOCITY_LIMITS *GP_getJointAngularVelocityLimits (deg/sec) [OUT]*/
+/* Parameter	 : int ctrlGrp - Robot control to fetch data (zero based index)	[IN] */
+/*				   JOINT_ANGULAR_VELOCITY_LIMITS *GP_getJointAngularVelocityLimits (rad/sec) [OUT]*/
 /* Return value	 : Success = OK 											  */
 /*				 : Failure = NG												  */
 /******************************************************************************/
@@ -236,6 +236,17 @@ extern STATUS	GP_getBaseAxisInfo(int ctrlGrp, BASE_AXIS_INFO* info);
 /*				 : Failure = NG												  */
 /******************************************************************************/
 extern STATUS	GP_getEcoModesettings(ECO_MODE_INFO* info);
+
+/******************************************************************************/
+/* << 27 >>                                                              	  */
+/* Function name : int GP_getQuantityOfRobotVariables()        				  */
+/* Functionality : Retrieve how many variables of a particular type have been */
+/*                 allocated in maintenance mode                          	  */
+/* Parameter	 : int varType [IN] (Use MP_VAR_B, MP_VAR_I... etc)		      */
+/* Return value	 : Success = OK 											  */
+/*				 : Failure = NG												  */
+/******************************************************************************/
+extern int      GP_getQuantityOfRobotVariables(int varType);
 
 #ifdef __cplusplus
 }
